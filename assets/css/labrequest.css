@@ -1,0 +1,53 @@
+body {
+      background: #f8f9fa;
+    }
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+      body * {
+        visibility: hidden;
+      }
+      #printSection, #printSection * {
+        visibility: visible;
+      }
+      #printSection {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+    .pharmacy-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .pharmacy-header i {
+      font-size: 50px;
+      color: #0d6efd;
+    }
+    .pharmacy-name {
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: #0d6efd;
+      text-align: center;
+    }
+    .pharmacy-contact {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+    #qrcode {
+      margin: 0 auto;
+      width: 128px;
+      height: 128px;
+    }
