@@ -145,3 +145,38 @@ function generatePrint(patient, doctor, selectedTests, date) {
   document.getElementById("printSection").classList.remove("d-none");
   window.print();
 }
+
+
+
+document.getElementById("patientSelect").addEventListener("change", function(){
+    const val = this.value;
+    if(!val) return;
+
+    const data = JSON.parse(val);
+
+    // populate patient info
+    document.getElementById("printPatientName").textContent = data.name;
+    document.getElementById("printPatientId").textContent = data.patient_no;
+    document.getElementById("printAgeSex").textContent = data.age + "/" + data.gender;
+    document.getElementById("printDoctorName").textContent = data.doctor_name;
+    document.getElementById("printDate").textContent = data.request_date;
+
+    // OPTIONAL: display phone/address etc if you want
+    // e.g. console.log(data.phone, data.address);
+
+    // populate requested tests as input fields
+    const testsContainer = document.getElementById("testsResults");
+    testsContainer.innerHTML = "";
+
+    if (data.requested_tests) {
+        data.requested_tests.split(",").forEach(test => {
+            const div = document.createElement("div");
+            div.classList.add("col-md-6", "mb-2");
+            div.innerHTML = `
+                <label class="form-label">${test}</label>
+                <input type="text" class="form-control" name="${test}" placeholder="Enter result for ${test}"/>
+            `;
+            testsContainer.appendChild(div);
+        });
+    }
+});
