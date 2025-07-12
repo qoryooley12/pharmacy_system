@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!empty($username) && !empty($password)) {
         // Check if user exists
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt = $pdo->prepare("SELECT username, full_name, password, role, profile FROM users WHERE username = ?");
         $stmt->execute([$username]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -32,6 +32,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // In real life: use password_hash and password_verify
             if ($user["password"] === $password) {
                 $_SESSION["username"] = $username;
+                $_SESSION["user"] = [
+    "username" => $user["username"],
+    "name" => $user["full_name"], // ✅ This is what you're missing!
+    "role" => $user["role"],
+    "profile" => $user["profile"]
+];
+
+
+
                 header("Location: ../Admin");
                 exit;
             } else {
