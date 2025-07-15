@@ -1,11 +1,12 @@
 <?php
-session_start(); // ✅ VERY IMPORTANT
+session_start();
+include_once '../auth/auth.php';
+// var_dump($_SESSION['user']);
 include_once '../config/conn.php';
-var_dump($_SESSION['user']);
 $user = $_SESSION['user'] ?? null;
 $name = $user['name'] ?? 'Guest User';
 $role = $user['role'] ?? 'User';
-$image = $user['profile'] ?? ''; // profile image
+$image = $user['profile'] ?? '';
 
 function getInitials($fullName) {
     $words = explode(" ", trim($fullName));
@@ -15,8 +16,6 @@ function getInitials($fullName) {
 }
 $initials = getInitials($name);
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -167,11 +166,11 @@ $initials = getInitials($name);
 <div class="header-left active">
 <a href="http://localhost/pharmacy_system/Admin" class="logo">
 <div class="d-flex justify-content-between align-items-center">
-<i class="fab fa-airbnb fs-1"></i>
-  <h4 class="title">Shaafiye</h4>
+<!-- <i class="fab fa-airbnb fs-1"></i>
+  <h4 class="title">Shaafiye</h4> -->
 </div>
 
-<!-- <img src="../assets/img/logo.png" alt=""> -->
+<img src="../assets/img/logo.png" alt="">
 </a>
 <a href="index.html" class="logo-small">
 <img src="../assets/img/logo-small.png" alt="">
@@ -190,7 +189,7 @@ $initials = getInitials($name);
 
 <ul class="nav user-menu">
 
-<li class="nav-item">
+<!-- <li class="nav-item">
 <div class="top-nav-search">
 <a href="javascript:void(0);" class="responsive-search">
 <i class="fa fa-search"></i>
@@ -205,7 +204,7 @@ $initials = getInitials($name);
 <a class="btn" id="searchdiv"><img src="../assets/img/icons/search.svg" alt="img"></a>
 </form>
 </div>
-</li>
+</li> -->
 
 
 <li class="nav-item dropdown has-arrow flag-nav">
@@ -332,7 +331,7 @@ $initials = getInitials($name);
             <a class="dropdown-item" href="profile.html"><i class="me-2" data-feather="user"></i> My Profile</a>
             <a class="dropdown-item" href="generalsettings.html"><i class="me-2" data-feather="settings"></i>Settings</a>
             <hr class="m-0">
-            <a class="dropdown-item logout pb-0" href="logout.php"><img src="../assets/img/icons/log-out.svg" class="me-2" alt="img">Logout</a>
+            <a class="dropdown-item logout pb-0" href="../auth/logout.php"><img src="../assets/img/icons/log-out.svg" class="me-2" alt="img">Logout</a>
         </div>
     </div>
 </li>

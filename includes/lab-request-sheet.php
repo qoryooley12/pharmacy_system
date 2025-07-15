@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,8 +56,8 @@
     }
     #qrcode {
       margin: 0 auto;
-      width: 128px;
-      height: 128px;
+      width: 200px;
+      height: 200px;
     }
   </style>
 </head>

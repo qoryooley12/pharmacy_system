@@ -1,5 +1,6 @@
 <?php
 include("../config/conn.php");
+include_once '../auth/auth.php';
 
 // Count total patients
 $sql = "SELECT COUNT(*) AS total_patients FROM patient";
@@ -38,12 +39,25 @@ if ($result_patients) {
         $latest_patients[] = $pat;
     }
 }
+
+
 ?>
 
 
 <div class="page-wrapper">
-  <div class="content">
+   <div class="content mb-2">
+    <div class="alert alert-primary d-flex align-items-center justify-content-between shadow-sm rounded p-4 mb-4">
+  <div class="d-flex align-items-center">
+    <i class="bi bi-person-circle fs-1 text-primary me-3"></i>
+    <div>
+      <h4 class="mb-0 fw-bold">Salaam Dr. <?php echo htmlspecialchars($_SESSION['user']['name']); ?></h4>
+      <small class="text-muted">Welcome to your dashboard</small>
+    </div>
+  </div>
+  <span class="badge bg-success rounded-pill px-3 py-2">Online</span>
+</div>
     <div class="row">
+      
       <div class="col-lg-3 col-sm-6 col-12 d-flex">
         <div class="dash-count">
           <div class="dash-counts">

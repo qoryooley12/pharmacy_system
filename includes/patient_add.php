@@ -18,12 +18,22 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="card">
-          <div class="card-header d-flex justify-content-between">
-            <h5 class="mb-0">Patient List</h5>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPatientModal">
-              <i class="bi bi-plus-lg me-1"></i> Add New Patient
-            </button>
-          </div>
+     <div class="card-header d-flex justify-content-between align-items-center">
+  <h5 class="mb-0">Patient List</h5>
+  <div class="d-flex gap-2">
+    <button class="btn btn-danger" id="deleteAllBtn">
+      <i class="bi bi-trash3 me-1"></i> Delete All Patients
+    </button>
+    <button class="btn btn-danger" id="btnDeletedPatients">
+      <i class="bi bi-archive me-1"></i> All Deleted Patients
+    </button>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPatientModal">
+      <i class="bi bi-plus-lg me-1"></i> Add New Patient
+    </button>
+  </div>
+</div>
+
+
           <div class="card-body">
             <div class="table-responsive" >
               <table class="table table-striped" id="patientTable">
@@ -99,5 +109,62 @@
         </div>
       </form>
     </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="editPatientModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <form id="editPatientForm" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Patient</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" name="id" id="edit_id">
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="edit_name" class="form-label">Name</label>
+            <input type="text" class="form-control" name="name" id="edit_name">
+          </div>
+
+          <div class="col-md-6">
+            <label for="edit_phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" name="phone" id="edit_phone">
+          </div>
+
+          <div class="col-md-6">
+            <label for="edit_gender" class="form-label">Gender</label>
+            <select class="form-select" name="gender" id="edit_gender">
+              <option selected disabled>Choose...</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label for="edit_age" class="form-label">Age</label>
+            <input type="number" class="form-control" name="age" id="edit_age">
+          </div>
+
+          <div class="col-md-12">
+            <label for="edit_address" class="form-label">Address</label>
+            <input type="text" class="form-control" name="address" id="edit_address">
+          </div>
+
+          <div class="col-md-12">
+            <label for="edit_conditions" class="form-label">Medical Conditions</label>
+            <textarea class="form-control" name="medical_conditions" id="edit_conditions" rows="2"></textarea>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Update Patient</button>
+      </div>
+    </form>
   </div>
 </div>

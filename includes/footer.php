@@ -14,6 +14,7 @@
 
 <script src="../assets/js/script.js"></script>
 
+
 <script src="../assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
 
   <!-- Google Translate Script -->
@@ -38,6 +39,8 @@
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="../js/lab_request.js"></script>
+<script src="../js/users.js"></script>
+<script src="../js/user-permission.js"></script>
 
 </body>
 </html>

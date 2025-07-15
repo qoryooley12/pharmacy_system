@@ -1,8 +1,11 @@
 <?php
-// Start session
 session_start();
 
-// Database connection
+if (isset($_SESSION['user'])) {
+    header("Location: http://localhost/pharmacy_system/Admin");
+    exit;
+}
+
 $host = "localhost";
 $dbname = "pharmacy_db";
 $user = "root";
@@ -22,29 +25,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = trim($_POST["password"]);
 
     if (!empty($username) && !empty($password)) {
-        // Check if user exists
-        $stmt = $pdo->prepare("SELECT username, full_name, password, role, profile FROM users WHERE username = ?");
+        $stmt = $pdo->prepare("
+            SELECT username, full_name, password, role, profile, status, permissions
+            FROM users
+            WHERE username = ?
+        ");
         $stmt->execute([$username]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            // Check password (plain text - demo only!)
-            // In real life: use password_hash and password_verify
-            if ($user["password"] === $password) {
-                $_SESSION["username"] = $username;
-                $_SESSION["user"] = [
-    "username" => $user["username"],
-    "name" => $user["full_name"], // ✅ This is what you're missing!
-    "role" => $user["role"],
-    "profile" => $user["profile"]
-];
-
-
-
-                header("Location: ../Admin");
-                exit;
+            if ($user["status"] !== "active") {
+                $error = "Your account is inactive. Please contact the administrator.";
             } else {
-                $error = "Invalid password.";
+                if ($user["password"] === $password) {
+                    $permissions = [];
+
+                    if (!empty($user["permissions"])) {
+                        $permissions = explode(",", $user["permissions"]);
+                    }
+
+                    $_SESSION["username"] = $username;
+                    $_SESSION["user"] = [
+                        "username" => $user["username"],
+                        "name" => $user["full_name"],
+                        "role" => $user["role"],
+                        "profile" => $user["profile"]
+                    ];
+
+                    $_SESSION["permissions"] = $permissions;
+
+                    header("Location: ../Admin");
+                    exit;
+                } else {
+                    $error = "Invalid password.";
+                }
             }
         } else {
             $error = "User not found.";
@@ -54,6 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

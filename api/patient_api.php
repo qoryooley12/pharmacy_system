@@ -109,4 +109,157 @@ function fetchSinglePatient($conn) {
 }
 
 
+function updatePatient($conn) {
+    $id = intval($_POST['id'] ?? 0);
+    $name = mysqli_real_escape_string($conn, $_POST['name'] ?? '');
+    $phone = mysqli_real_escape_string($conn, $_POST['phone'] ?? '');
+    $gender = mysqli_real_escape_string($conn, $_POST['gender'] ?? '');
+    $age = intval($_POST['age'] ?? 0);
+    $address = mysqli_real_escape_string($conn, $_POST['address'] ?? '');
+    $conditions = mysqli_real_escape_string($conn, $_POST['medical_conditions'] ?? '');
+
+    if (
+        empty($id) ||
+        empty($name) ||
+        empty($phone) ||
+        empty($gender) ||
+        empty($age) ||
+        empty($address) ||
+        empty($conditions)
+    ) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Dhammaan xogaha waa in la buuxiyaa!' // All fields are required
+        ]);
+        return;
+    }
+
+    $sql = "UPDATE patient 
+            SET 
+                name = '$name',
+                phone = '$phone',
+                gender = '$gender',
+                age = $age,
+                address = '$address',
+                medical_conditions = '$conditions'
+            WHERE id = $id";
+
+    if (mysqli_query($conn, $sql)) {
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Bukaan waa la cusboonaysiiyay!' // Patient updated successfully
+        ]);
+    } else {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Qalad ayaa dhacay: ' . mysqli_error($conn) // An error occurred
+        ]);
+    }
+}
+
+
+
+
+
+function deletePatient($conn) {
+    $id = intval($_POST['id'] ?? 0);
+
+    if ($id <= 0) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'ID sax ah lama helin!'
+        ]);
+        return;
+    }
+
+    // optional: check if patient exists
+    $check = mysqli_query($conn, "SELECT * FROM patient WHERE id = $id LIMIT 1");
+    if (!$check || mysqli_num_rows($check) == 0) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Bukaanka lama helin!'
+        ]);
+        return;
+    }
+
+    $sql = "DELETE FROM patient WHERE id = $id";
+    if (mysqli_query($conn, $sql)) {
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Bukaanka si guul leh ayaa loo tirtiyay!'
+        ]);
+    } else {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Tirtiriddu waa ku guuldareysatay: ' . mysqli_error($conn)
+        ]);
+    }
+}
+
+
+
+function deleteAllPatients($conn) {
+    // Fetch all patients first
+    $sql = "SELECT * FROM patient";
+    $result = mysqli_query($conn, $sql);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            // Insert each patient into patients_trash
+            $insertSQL = "INSERT INTO patients_trash
+                (patient_no, name, phone, gender, age, address, medical_conditions)
+                VALUES (
+                    '".mysqli_real_escape_string($conn, $row['patient_no'])."',
+                    '".mysqli_real_escape_string($conn, $row['name'])."',
+                    '".mysqli_real_escape_string($conn, $row['phone'])."',
+                    '".mysqli_real_escape_string($conn, $row['gender'])."',
+                    ".intval($row['age']).",
+                    '".mysqli_real_escape_string($conn, $row['address'])."',
+                    '".mysqli_real_escape_string($conn, $row['medical_conditions'])."'
+                )";
+            mysqli_query($conn, $insertSQL);
+        }
+
+        // Delete all patients from original table
+        $deleteSQL = "DELETE FROM patient";
+        if (mysqli_query($conn, $deleteSQL)) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Bukaannada oo dhan waa la raray oo la tirtiray!'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Tirtirka wuu guuldareystay: ' . mysqli_error($conn)
+            ]);
+        }
+    } else {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Ma jiro bukaan la tirtiri karo.'
+        ]);
+    }
+}
+
+
+
+function fetchAllDeletedPatients($conn) {
+    $sql = "SELECT * FROM patients_trash ORDER BY deleted_at DESC";
+    $result = mysqli_query($conn, $sql);
+    $patients = [];
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $patients[] = $row;
+        }
+    }
+
+    echo json_encode([
+        'status' => 'success',
+        'data' => $patients
+    ]);
+}
+
+
+
 ?>
